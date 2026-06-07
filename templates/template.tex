@@ -1,0 +1,131 @@
+% =====================================================================
+%  template.tex — starting skeleton for a Dwight study-notes document.
+%  Copy this file, rename it, and fill in the chapters.
+%
+%  Language:  \usepackage{dwightnotes}          -> English labels
+%             \usepackage[polish]{dwightnotes}  -> Polish labels + babel
+%  Build:     latexmk -pdf <file>.tex      (or run pdflatex twice)
+%             ./scripts/build.sh <file>.tex
+% =====================================================================
+\documentclass[11pt,a4paper]{report}
+\usepackage{dwightnotes}            % add [polish] for Polish-language notes
+
+% Right-hand running header (short course/subject tag):
+\renewcommand{\dwRunHead}{Subject — notes}
+
+\begin{document}
+
+% --------------------------------------------------------------------
+%  COVER
+% --------------------------------------------------------------------
+\begin{titlepage}
+\dwightbanner{Course / Subject Title}{Comprehensive study notes}
+
+\vspace*{6.5cm}
+\noindent\begin{minipage}{\textwidth}\sffamily
+{\Large\bfseries\color{dwblue} Exam preparation}\\[6pt]
+{\large\color{dwgray} Institution / programme}\\[2pt]
+{\large\color{dwgray} Level \textbullet\ Field \textbullet\ Semester}\\[14pt]
+\end{minipage}
+
+\vfill
+\begin{tcolorbox}[enhanced,colback=dwboxgray,colframe=dwblue,boxrule=1pt,arc=3pt,
+   title={\faMapSigns\ \bfseries What's inside},fonttitle=\sffamily,coltitle=white,
+   attach boxed title to top left={xshift=10pt,yshift=-\tcboxedtitleheight/2},
+   boxed title style={colback=dwblue}]
+\sffamily\small
+One-paragraph summary of scope: every topic of the course, with definitions,
+worked examples, diagrams and \textbf{exam tips} — plus a fully solved sample
+exam and a one-page cheat sheet.
+\end{tcolorbox}
+\end{titlepage}
+
+% --------------------------------------------------------------------
+%  TABLE OF CONTENTS
+% --------------------------------------------------------------------
+\renewcommand{\contentsname}{\color{dwblue}\sffamily Contents}
+\microtypesetup{protrusion=false}
+\tableofcontents
+\microtypesetup{protrusion=true}
+\cleardoublepage
+
+% --------------------------------------------------------------------
+%  HOW TO USE (optional front matter)
+% --------------------------------------------------------------------
+\chapter*{How to use these notes}
+\addcontentsline{toc}{chapter}{How to use these notes}
+\markboth{Introduction}{Introduction}
+
+\begin{keypoint}
+\sffamily\small
+\textbf{Box legend:}\\[4pt]
+\faBookmark~\textcolor{dwblue}{\textbf{Definition}} — memorise verbatim.\quad
+\faLightbulb~\textcolor{dwgreen}{\textbf{Example}} — concrete, worked cases.\\[3pt]
+\faCalculator~\textcolor{dwpurple}{\textbf{Formula}} — formulas you must know.\quad
+\faExclamationTriangle~\textcolor{dworange}{\textbf{Note}} — common traps.\\[3pt]
+\faGraduationCap~\textcolor{dwred}{\textbf{On the exam}} — model answers to likely questions.
+\end{keypoint}
+
+% --------------------------------------------------------------------
+%  SAMPLE CHAPTER (delete / replace)
+% --------------------------------------------------------------------
+\chapter{Topic title}
+\label{ch:topic}
+
+Short framing paragraph: what this topic is and why it matters.
+
+\section{Core idea}
+
+\begin{definition}
+\term{Key term} — the precise, exam-ready definition.
+\end{definition}
+
+\begin{formula}
+\[ y = \frac{a + 4b + c}{6} \qquad \sigma = \frac{c-a}{6} \]
+\end{formula}
+
+\begin{example}
+A fully worked numerical example with the actual arithmetic spelled out.
+\end{example}
+
+\begin{note}
+A common mistake to avoid, stated crisply.
+\end{note}
+
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\small,>={Stealth[]},node distance=10mm]
+  \node[draw,circle,fill=dwblue!12,minimum size=8mm] (a){A};
+  \node[draw,circle,fill=dwblue!12,minimum size=8mm,right=of a] (b){B};
+  \node[draw,circle,fill=dwred!18,minimum size=8mm,right=of b] (c){C};
+  \draw[->](a)--(b); \draw[->](b)--(c);
+\end{tikzpicture}
+\end{center}
+
+\begin{exam}[: model answer]
+How to answer the likely exam question on this topic, step by step.
+\end{exam}
+
+% --------------------------------------------------------------------
+%  SOLVED SAMPLE EXAM (high value — keep this chapter)
+% --------------------------------------------------------------------
+\chapter{Solved sample exam}
+\label{ch:exam}
+
+\section*{Question 1 — \dots}
+\addcontentsline{toc}{section}{Q1 — \dots}
+Model answer.
+
+% --------------------------------------------------------------------
+%  CHEAT SHEET (one or two columns)
+% --------------------------------------------------------------------
+\appendix
+\chapter{Cheat sheet — formulas \& numbers}
+\begin{multicols}{2}
+\small
+\textbf{\color{dwblue}Topic A}\\
+key formula; key number.\\[4pt]
+\textbf{\color{dwblue}Topic B}\\
+key formula; key number.
+\end{multicols}
+
+\end{document}

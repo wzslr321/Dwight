@@ -1,0 +1,24 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+
+# OS / editor
+.DS_Store
+*.swp
+
+# Source course material is copyrighted — keep it out of the repo.
+# Drop inputs here locally; this folder is ignored.
+/sources/
+/input/

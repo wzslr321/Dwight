@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdflatex:*)",
+      "Bash(lualatex:*)",
+      "Bash(xelatex:*)",
+      "Bash(latexmk:*)",
+      "Bash(pdfinfo:*)",
+      "Bash(pdftoppm:*)",
+      "Bash(kpsewhich:*)",
+      "Bash(mdls:*)",
+      "Bash(textutil:*)",
+      "Bash(pandoc:*)",
+      "Bash(./scripts/build.sh:*)",
+      "Read",
+      "Glob",
+      "Grep"
+    ]
+  }
+}

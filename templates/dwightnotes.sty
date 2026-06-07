@@ -1,0 +1,186 @@
+% =====================================================================
+%  dwightnotes.sty — reusable style for beautiful, exam-ready study notes
+%
+%  Usage:    \documentclass[11pt,a4paper]{report}
+%            \usepackage{dwightnotes}              % English labels (default)
+%            \usepackage[polish]{dwightnotes}      % Polish labels + babel
+%
+%  Build:    pdflatex (run twice — for the ToC and cross-references)
+%  Requires: a full TeX Live (tcolorbox, tikz, forest, pgfplots,
+%            fontawesome5, babel).
+% =====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{dwightnotes}[2026/06/07 v1.0 Dwight study-notes style]
+
+% ---------- Language option: [english] (default) or [polish] ----------
+\newif\ifdw@polish
+\DeclareOption{polish}{\dw@polishtrue}
+\DeclareOption{english}{\dw@polishfalse}
+\ExecuteOptions{english}
+\ProcessOptions\relax
+
+% ---------- Encoding & fonts ----------
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\ifdw@polish\RequirePackage[polish]{babel}\else\RequirePackage[english]{babel}\fi
+\RequirePackage{lmodern}
+\RequirePackage{microtype}
+
+% ---------- Math ----------
+\RequirePackage{amsmath,amssymb}
+
+% ---------- Graphics & diagrams ----------
+\RequirePackage{graphicx}
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc,backgrounds,fit,chains}
+\RequirePackage{forest}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ---------- Tables & lists ----------
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{multirow}
+\RequirePackage{enumitem}
+\RequirePackage{multicol}
+\setlist{itemsep=2pt,topsep=3pt}
+
+% ---------- Callout boxes & icons ----------
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{fontawesome5}
+
+% ---------- Page layout ----------
+\RequirePackage[a4paper,margin=2.4cm,headheight=15pt]{geometry}
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+\RequirePackage{emptypage}
+
+% =====================================================================
+%  LABELS — box titles & the "Chapter" word.
+%  Redefine any of these to relabel or localise (see [polish] below).
+% =====================================================================
+\newcommand{\dwLblDefinition}{Definition}
+\newcommand{\dwLblExample}{Example}
+\newcommand{\dwLblExam}{On the exam}
+\newcommand{\dwLblNote}{Note}
+\newcommand{\dwLblFormula}{Formula}
+\newcommand{\dwLblChapter}{CHAPTER}
+\newcommand{\dwRunHead}{Notes} % right-hand running header
+
+\ifdw@polish
+  \renewcommand{\dwLblDefinition}{Definicja}
+  \renewcommand{\dwLblExample}{Przyk\l ad}
+  \renewcommand{\dwLblExam}{Na egzaminie}
+  \renewcommand{\dwLblNote}{Uwaga}
+  \renewcommand{\dwLblFormula}{Wz\'or}
+  \renewcommand{\dwLblChapter}{ROZDZIA\L}
+  \renewcommand{\dwRunHead}{Notatki}
+\fi
+
+% =====================================================================
+%  COLOUR PALETTE (rebrand the notes by editing these)
+% =====================================================================
+\definecolor{dwblue}{HTML}{1F3A5F}     % deep navy (primary)
+\definecolor{dwblue2}{HTML}{2C5282}    % lighter navy
+\definecolor{dworange}{HTML}{C05621}   % amber (accent / notes)
+\definecolor{dwgreen}{HTML}{276749}    % green (examples)
+\definecolor{dwred}{HTML}{9B2C2C}      % red (exam)
+\definecolor{dwpurple}{HTML}{553C9A}   % purple (formulas)
+\definecolor{dwgray}{HTML}{4A5568}
+\definecolor{dwboxgray}{HTML}{F7FAFC}
+\definecolor{dwline}{HTML}{CBD5E0}
+
+% ---------- Hyperlinks ----------
+\RequirePackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=dwblue,urlcolor=dwblue,citecolor=dwblue}
+
+% =====================================================================
+%  HEADINGS
+% =====================================================================
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\bfseries\color{dwblue}}
+  {\filright\Large\color{dworange} \dwLblChapter\ \thechapter}
+  {6pt}{\Huge}
+  [\vspace{2pt}{\color{dwblue}\titlerule[1.6pt]}]
+\titlespacing*{\chapter}{0pt}{6pt}{18pt}
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{dwblue2}}{\thesection}{0.6em}{}
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{dwgray}}{\thesubsection}{0.6em}{}
+
+% ---------- Header / footer ----------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\footnotesize\sffamily\color{dwgray}\nouppercase{\leftmark}}
+\fancyhead[R]{\footnotesize\sffamily\color{dwgray}\dwRunHead}
+\fancyfoot[C]{\thepage}
+
+% =====================================================================
+%  TCOLORBOX ENVIRONMENTS
+%  definition · example · exam · note · formula · keypoint
+%  (env names kept stable; titles come from the \dwLbl* labels above)
+% =====================================================================
+\newtcolorbox{definition}[1][]{
+  enhanced,breakable,colback=blue!4,colframe=dwblue,
+  fonttitle=\bfseries\sffamily,coltitle=white,title={\faBookmark\ \dwLblDefinition#1},
+  boxrule=0.8pt,arc=2pt,left=6pt,right=6pt,top=9pt,bottom=5pt,
+  attach boxed title to top left={xshift=8pt,yshift=-\tcboxedtitleheight/2},
+  boxed title style={colback=dwblue,arc=1pt}}
+
+\newtcolorbox{example}[1][]{
+  enhanced,breakable,colback=dwgreen!5,colframe=dwgreen,
+  fonttitle=\bfseries\sffamily,coltitle=white,title={\faLightbulb\ \dwLblExample#1},
+  boxrule=0.8pt,arc=2pt,left=6pt,right=6pt,top=9pt,bottom=5pt,
+  attach boxed title to top left={xshift=8pt,yshift=-\tcboxedtitleheight/2},
+  boxed title style={colback=dwgreen,arc=1pt}}
+
+\newtcolorbox{exam}[1][]{
+  enhanced,breakable,colback=dwred!5,colframe=dwred,
+  fonttitle=\bfseries\sffamily,coltitle=white,title={\faGraduationCap\ \dwLblExam#1},
+  boxrule=1pt,arc=2pt,left=6pt,right=6pt,top=9pt,bottom=5pt,
+  attach boxed title to top left={xshift=8pt,yshift=-\tcboxedtitleheight/2},
+  boxed title style={colback=dwred,arc=1pt}}
+
+\newtcolorbox{note}[1][]{
+  enhanced,breakable,colback=dworange!8,colframe=dworange,
+  fonttitle=\bfseries\sffamily,coltitle=white,title={\faExclamationTriangle\ \dwLblNote#1},
+  boxrule=0.8pt,arc=2pt,left=6pt,right=6pt,top=9pt,bottom=5pt,
+  attach boxed title to top left={xshift=8pt,yshift=-\tcboxedtitleheight/2},
+  boxed title style={colback=dworange,arc=1pt}}
+
+\newtcolorbox{formula}[1][]{
+  enhanced,breakable,colback=dwpurple!5,colframe=dwpurple,
+  fonttitle=\bfseries\sffamily,coltitle=white,title={\faCalculator\ \dwLblFormula#1},
+  boxrule=0.8pt,arc=2pt,left=6pt,right=6pt,top=9pt,bottom=5pt,
+  attach boxed title to top left={xshift=8pt,yshift=-\tcboxedtitleheight/2},
+  boxed title style={colback=dwpurple,arc=1pt}}
+
+% small title-less "in a nutshell" box
+\newtcolorbox{keypoint}{
+  enhanced,breakable,colback=dwboxgray,colframe=dwline,
+  boxrule=0.6pt,arc=2pt,left=6pt,right=6pt,top=4pt,bottom=4pt}
+
+% =====================================================================
+%  HELPER MACROS
+% =====================================================================
+\newcommand{\term}[1]{\textcolor{dwblue}{\textbf{#1}}}        % highlighted term
+\newcommand{\en}[1]{\textit{\textcolor{dwgray}{(en.\ #1)}}}   % gloss / translation
+
+% Coloured cover banner:  \dwightbanner{Title}{Subtitle}
+\newcommand{\dwightbanner}[2]{%
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[dwblue] (current page.north west) rectangle ([yshift=-5cm]current page.north east);
+  \fill[dworange] ([yshift=-5cm]current page.north west) rectangle ([yshift=-5.4cm]current page.north east);
+  \node[anchor=north west,text=white,font=\sffamily] at ([xshift=1.6cm,yshift=-1.2cm]current page.north west)
+     {\begin{minipage}{15cm}\raggedright
+       {\fontsize{30}{34}\selectfont\bfseries #1}\\[10pt]
+       {\Large #2}
+      \end{minipage}};
+\end{tikzpicture}}
+
+\endinput
